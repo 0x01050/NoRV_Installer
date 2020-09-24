@@ -1,5 +1,5 @@
 Name "NoRV Client"
-OutFile "NoRV Client Installer 1.5.exe"
+OutFile "NoRV Client Installer 1.6.exe"
 RequestExecutionLevel admin
 Unicode True
 InstallDir "$LocalAppdata\NoRV Client"
@@ -27,26 +27,29 @@ Section "NoRV Client"
   SectionIn RO
   
   SetOutPath $INSTDIR
-  File /r "..\NoRV\bin\Install\"
+  File /r "..\NoRV_Client\bin\Install\"
+  SetOutPath "$INSTDIR\RTMP"
+  File /r /x ".git" "..\RTMP_Server\"
   WriteUninstaller "$INSTDIR\uninstall.exe"
   !insertmacro _ReplaceInFile "$INSTDIR\Config.xml" "#LogPath#" $LogPath
   !insertmacro _ReplaceInFile "$INSTDIR\Config.xml" "#VideoPath#" $VideoPath
   Delete "$INSTDIR\Config.xml.old"
   
   WriteRegStr HKLM "SOFTWARE\NoRV Client" "Install_Dir" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayName" "NoRV Client 1.5"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayName" "NoRV Client 1.6"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayIcon" '"$INSTDIR\NoRV Client.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.5.6"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.6.0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "InstallLocation" '"$INSTDIR"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "Publisher" "NoRV"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "NoRepair" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "VersionMajor" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "VersionMinor" 5
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "VersionMinor" 6
 
   ; Startup Shortcut
   CreateShortcut "$SMPROGRAMS\Startup\NoRV Client.lnk" "$INSTDIR\NoRV Client.exe"
+  CreateShortcut "$SMPROGRAMS\Startup\NGINX.lnk" "$INSTDIR\RTMP\nginx.exe"
 SectionEnd
 
 Section "WebServer Configuration"
@@ -62,7 +65,7 @@ Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\NoRV Client"
   CreateShortcut "$SMPROGRAMS\NoRV Client\Uninstall.lnk" "$INSTDIR\uninstall.exe"
   CreateShortcut "$SMPROGRAMS\NoRV Client\NoRV Client.lnk" "$INSTDIR\NoRV Client.exe"
-  CreateShortcut "$SMPROGRAMS\NoRV Client\NoRV Client - Track.lnk" "$INSTDIR\Track.exe"
+  ; CreateShortcut "$SMPROGRAMS\NoRV Client\NoRV Client - Track.lnk" "$INSTDIR\Track.exe"
 SectionEnd
 
 ;--------------------------------
@@ -75,6 +78,7 @@ Section "Uninstall"
 
   RMDir /r "$SMPROGRAMS\NoRV Client"
   Delete "$SMPROGRAMS\Startup\NoRV Client.lnk"
+  Delete "$SMPROGRAMS\Startup\NGINX.lnk"
   RMDir /r "$INSTDIR"
 
   nsExec::Exec 'netsh http delete urlacl url=http://*:80/'
