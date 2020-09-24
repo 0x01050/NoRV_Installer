@@ -1,0 +1,7 @@
+1) Open Port 80 in Firewall
+2) Install OBS
+3) Setup OBS
+4) Install two obs plugins
+5) Enable OBS Websocket Plugin
+6) Enable OBS Google Live Transcription Plugin
+7) Install NoRV
