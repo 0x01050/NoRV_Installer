@@ -28,8 +28,6 @@ Section "NoRV Client"
   
   SetOutPath $INSTDIR
   File /r "..\NoRV_Client\bin\Install\"
-  SetOutPath "$INSTDIR\RTMP"
-  File /r /x ".git" "..\RTMP_Server\"
   WriteUninstaller "$INSTDIR\uninstall.exe"
   !insertmacro _ReplaceInFile "$INSTDIR\Config.xml" "#LogPath#" $LogPath
   !insertmacro _ReplaceInFile "$INSTDIR\Config.xml" "#VideoPath#" $VideoPath
@@ -38,7 +36,7 @@ Section "NoRV Client"
   WriteRegStr HKLM "SOFTWARE\NoRV Client" "Install_Dir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayName" "NoRV Client 1.6"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayIcon" '"$INSTDIR\NoRV Client.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.6.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.6.1"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "InstallLocation" '"$INSTDIR"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "Publisher" "NoRV"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "UninstallString" '"$INSTDIR\uninstall.exe"'
@@ -49,23 +47,17 @@ Section "NoRV Client"
 
   ; Startup Shortcut
   CreateShortcut "$SMPROGRAMS\Startup\NoRV Client.lnk" "$INSTDIR\NoRV Client.exe"
-  CreateShortcut "$SMPROGRAMS\Startup\NGINX.lnk" "$INSTDIR\RTMP\nginx.exe"
 SectionEnd
 
 Section "WebServer Configuration"
   nsExec::Exec 'netsh http delete urlacl url=http://*:80/'
   nsExec::Exec 'netsh http add urlacl url=http://*:80/ user=Everyone'
-  ; nsExec::Exec 'netsh http delete urlacl url=https://*:443/'
-  ; nsExec::Exec 'netsh http add urlacl url=https://*:443/ user=Everyone'
-  ; nsExec::Exec 'netsh http delete sslcert ipport=0.0.0.0:443'
-  ; nsExec::Exec 'netsh http add sslcert ipport=0.0.0.0:443 certhash=db8c932b43be2d5d0f41a851eb6c45213cac8e33 appid={58e3b88d-8864-4778-89a7-569226ed694e}'
 SectionEnd
 
 Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\NoRV Client"
   CreateShortcut "$SMPROGRAMS\NoRV Client\Uninstall.lnk" "$INSTDIR\uninstall.exe"
   CreateShortcut "$SMPROGRAMS\NoRV Client\NoRV Client.lnk" "$INSTDIR\NoRV Client.exe"
-  ; CreateShortcut "$SMPROGRAMS\NoRV Client\NoRV Client - Track.lnk" "$INSTDIR\Track.exe"
 SectionEnd
 
 ;--------------------------------
@@ -82,8 +74,6 @@ Section "Uninstall"
   RMDir /r "$INSTDIR"
 
   nsExec::Exec 'netsh http delete urlacl url=http://*:80/'
-  ; nsExec::Exec 'netsh http delete urlacl url=https://*:443/'
-  ; nsExec::Exec 'netsh http delete sslcert ipport=0.0.0.0:443'
 SectionEnd
 
 Var LogPathEdit
