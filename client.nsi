@@ -36,7 +36,7 @@ Section "NoRV Client"
   WriteRegStr HKLM "SOFTWARE\NoRV Client" "Install_Dir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayName" "NoRV Client 1.6"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayIcon" '"$INSTDIR\NoRV Client.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.6.1"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "DisplayVersion" "1.6.2"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "InstallLocation" '"$INSTDIR"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "Publisher" "NoRV"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NoRV Client" "UninstallString" '"$INSTDIR\uninstall.exe"'
